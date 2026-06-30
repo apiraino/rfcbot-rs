@@ -34,6 +34,26 @@ before running `docker-compose up` to see your changes take effect.
 By default this stores your database files in `target/data/`, so any temporary changes you make to 
 the database will be removed by a `cargo clean` and you'll need to run the above commands again.
 
+### Without Docker
+
+### Configure a database
+
+To use Postgres, you will need to install it and configure it:
+
+1. Install Postgres. Look online for any help with installing and setting up Postgres (particularly if you need to create a user and set up permissions).
+2. Login into Postgres (optionally setting host and port)
+   ```
+   sudo su - postgres
+   psql -d template1 -U postgres
+   ```
+2. Create a DB user: `CREATE ROLE rfcbot LOGIN PASSWORD 'pass';`
+3. Create the rfcbot DB: `CREATE DATABASE rfcbot with ENCODING 'UTF8' LC_COLLATE='C' LC_CTYPE='C' template=template0 owner=rfcbot;`
+4. Login is now possible with the new user: `psql rfcbot -U rfcbot -W`
+4. In the `.env` file, set the `DATABASE_URL`:
+   ```sh
+   DATABASE_URL=postgres://rfcbot:pass@localhost/rfcbot
+   ```
+
 ### Database dumps
 
 It can be useful to have a database with some existing data to start from. "Bootstrap" files are 
